@@ -6,9 +6,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import org.dodroid.max.weatherkotlin.R
 import org.dodroid.max.weatherkotlin.domain.commands.RequestForecastCommand
+import org.dodroid.max.weatherkotlin.domain.model.Forecast
 import org.dodroid.max.weatherkotlin.ui.adapters.ForecastListAdapter
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 
@@ -24,7 +26,12 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             val result = RequestForecastCommand("141503").execute()
             uiThread {
-                forecastList.adapter = ForecastListAdapter(result)
+                forecastList.adapter = ForecastListAdapter(result,
+                        object : ForecastListAdapter.OnItemClickListener {
+                            override fun invoke(forecast: Forecast) {
+                                toast(forecast.date)
+                            }
+                        })
             }
         }
     }
