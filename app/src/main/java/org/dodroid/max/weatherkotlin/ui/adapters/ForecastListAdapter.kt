@@ -14,7 +14,9 @@ import org.dodroid.max.weatherkotlin.ui.utils.ctx
 import org.jetbrains.anko.find
 
 
-class ForecastListAdapter(private val weekForecast: ForecastList, private val itemClick: OnItemClickListener) : RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
+class ForecastListAdapter(private val weekForecast: ForecastList,
+                          private val itemClick: (Forecast) -> Unit) :
+        RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.ctx).inflate(R.layout.item_forecast, parent, false)
@@ -27,7 +29,7 @@ class ForecastListAdapter(private val weekForecast: ForecastList, private val it
 
     override fun getItemCount(): Int = weekForecast.size
 
-    class ViewHolder(view: View, private val itemClick: OnItemClickListener) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view) {
         private val iconView = view.find<ImageView>(R.id.icon)
         private val dateView = view.find<TextView>(R.id.date)
         private val descriptionView = view.find<TextView>(R.id.description)
@@ -45,10 +47,4 @@ class ForecastListAdapter(private val weekForecast: ForecastList, private val it
             }
         }
     }
-
-
-    interface OnItemClickListener {
-        operator fun invoke(forecast: Forecast)
-    }
-
 }
