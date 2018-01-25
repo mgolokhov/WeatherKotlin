@@ -10,6 +10,7 @@ import org.dodroid.max.weatherkotlin.R
 import org.dodroid.max.weatherkotlin.domain.model.Forecast
 import org.dodroid.max.weatherkotlin.domain.model.ForecastList
 import org.dodroid.max.weatherkotlin.extentions.ctx
+import org.dodroid.max.weatherkotlin.extentions.toDateString
 import java.text.DateFormat
 import java.util.*
 
@@ -34,16 +35,12 @@ class ForecastListAdapter(private val weekForecast: ForecastList,
             with(forecast) {
                 // synthetic find views outside of Activity or Fragment is not cached
                 Picasso.with(itemView.ctx).load(iconUrl).into(itemView.icon)
-                itemView.date.text = convertDate(date)
+                itemView.date.text = date.toDateString()
                 itemView.description.text = description
                 itemView.maxTemperature.text = "${high}º"
                 itemView.minTemperature.text = "${low}º"
                 itemView.setOnClickListener { itemClick(this) }
             }
-        }
-        private fun convertDate(date: Long): String {
-            val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-            return df.format(date)
         }
     }
 }

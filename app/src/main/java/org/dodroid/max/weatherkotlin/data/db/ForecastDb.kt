@@ -1,17 +1,22 @@
 package org.dodroid.max.weatherkotlin.data.db
 
 import org.dodroid.max.weatherkotlin.domain.datasource.ForecastDataSource
+import org.dodroid.max.weatherkotlin.domain.model.Forecast
 import org.dodroid.max.weatherkotlin.domain.model.ForecastList
-import org.dodroid.max.weatherkotlin.extentions.clear
-import org.dodroid.max.weatherkotlin.extentions.parseList
-import org.dodroid.max.weatherkotlin.extentions.parseOpt
-import org.dodroid.max.weatherkotlin.extentions.toVarargArray
+import org.dodroid.max.weatherkotlin.extentions.*
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 
 
 class ForecastDb(private val forecastDbHelper: ForecastDbHelper = ForecastDbHelper.instance,
                  private val dataMapper: DbDataMapper = DbDataMapper()): ForecastDataSource {
+
+    override fun requestDayForecast(id: Long) = forecastDbHelper.use {
+        val forecast = select(DayForecastTable.NAME).byId(id).
+                parseOpt { DayForecast(HashMap(it)) }
+
+        if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
+    }
 
     override fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
 
@@ -38,3 +43,5 @@ class ForecastDb(private val forecastDbHelper: ForecastDbHelper = ForecastDbHelp
         }
     }
 }
+
+
