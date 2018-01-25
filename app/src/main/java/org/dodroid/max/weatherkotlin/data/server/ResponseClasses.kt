@@ -1,4 +1,4 @@
-package org.dodroid.max.weatherkotlin.data
+package org.dodroid.max.weatherkotlin.data.server
 
 
 data class ForecastResult(val city: City, val list: List<Forecast>)

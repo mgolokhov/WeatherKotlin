@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_forecast.*
 import org.dodroid.max.weatherkotlin.R
 import org.dodroid.max.weatherkotlin.domain.commands.RequestForecastCommand
 import org.dodroid.max.weatherkotlin.ui.adapters.ForecastListAdapter
