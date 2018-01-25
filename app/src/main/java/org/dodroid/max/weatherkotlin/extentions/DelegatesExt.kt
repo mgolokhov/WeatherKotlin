@@ -1,4 +1,4 @@
-package org.dodroid.max.weatherkotlin.ui.utils
+package org.dodroid.max.weatherkotlin.extentions
 
 import kotlin.reflect.KProperty
 

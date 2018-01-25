@@ -1,7 +1,7 @@
 package org.dodroid.max.weatherkotlin.ui
 
 import android.app.Application
-import org.dodroid.max.weatherkotlin.ui.utils.DelegatesExt
+import org.dodroid.max.weatherkotlin.extentions.DelegatesExt
 
 
 class App: Application() {
