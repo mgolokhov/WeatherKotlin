@@ -1,7 +1,6 @@
 package org.dodroid.max.weatherkotlin.data.db
 
 import org.dodroid.max.weatherkotlin.domain.datasource.ForecastDataSource
-import org.dodroid.max.weatherkotlin.domain.model.Forecast
 import org.dodroid.max.weatherkotlin.domain.model.ForecastList
 import org.dodroid.max.weatherkotlin.extentions.*
 import org.jetbrains.anko.db.insert
@@ -15,7 +14,7 @@ class ForecastDb(private val forecastDbHelper: ForecastDbHelper = ForecastDbHelp
         val forecast = select(DayForecastTable.NAME).byId(id).
                 parseOpt { DayForecast(HashMap(it)) }
 
-        if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
+        forecast?.let { dataMapper.convertDayToDomain(it) }
     }
 
     override fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
@@ -29,7 +28,7 @@ class ForecastDb(private val forecastDbHelper: ForecastDbHelper = ForecastDbHelp
                 .whereSimple("${CityForecastTable.ID} = ?", zipCode.toString())
                 .parseOpt { CityForecast(HashMap(it), dailyForecast) }
 
-        if (city != null) dataMapper.convertToDomain(city) else null
+        city?.let { dataMapper.convertToDomain(it) }
     }
 
     fun saveForecast(forecast: ForecastList) = forecastDbHelper.use {
