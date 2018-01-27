@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import org.dodroid.max.weatherkotlin.R
 import org.dodroid.max.weatherkotlin.domain.commands.RequestForecastCommand
+import org.dodroid.max.weatherkotlin.extentions.DelegatesExt
 import org.dodroid.max.weatherkotlin.ui.adapters.ForecastListAdapter
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
@@ -17,16 +18,17 @@ import org.jetbrains.anko.uiThread
 class MainActivity : AppCompatActivity(), ToolbarManager {
 
     override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
+    private val zipCode: Long by DelegatesExt.preference(this, SettingsActivity.ZIP_CODE,
+            SettingsActivity.DEFAULT_ZIP)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initToolbar()
-        forecastList.layoutManager = LinearLayoutManager(this)
-        attachToScroll(forecastList)
+    override fun onResume() {
+        super.onResume()
+        loadForecast()
+    }
 
+    private fun loadForecast() {
         doAsync {
-            val result = RequestForecastCommand(141503).execute()
+            val result = RequestForecastCommand(zipCode).execute()
             uiThread {
                 val adapter = ForecastListAdapter(result) {
                     startActivity<DetailsActivity>(DetailsActivity.ID to it.id,
@@ -36,5 +38,13 @@ class MainActivity : AppCompatActivity(), ToolbarManager {
                 toolbarTitle = "${result.city} (${result.country})"
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        initToolbar()
+        forecastList.layoutManager = LinearLayoutManager(this)
+        attachToScroll(forecastList)
     }
 }
